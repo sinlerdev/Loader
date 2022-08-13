@@ -1,10 +1,12 @@
+type filter = (ModuleScript) -> {ModuleScript}
+
 local Loader = {}
 
 local function isModuleScript(instance : Instance)
 	return instance:IsA("ModuleScript")
 end
 
-local function load(tbl, filter)
+local function load(tbl, filter : filter)
 	local RequiredModules = table.create(#tbl)
 	for _, ModuleScript : ModuleScript in tbl do
 		if filter == nil or (filter(ModuleScript) == true) and isModuleScript(ModuleScript) then
@@ -15,11 +17,12 @@ local function load(tbl, filter)
 	return RequiredModules
 end
 
-function Loader.loadChildren(Parent : Instance, filter : (ModuleScript) -> {ModuleScript})
+
+function Loader.loadChildren(Parent : Instance, filter : filter)
 	return load(Parent:GetChildren(), filter)
 end
 
-function Loader.loadDescendants(Parent : Instance, filter : (ModuleScript) -> {ModuleScript})
+function Loader.loadDescendants(Parent : Instance, filter : filter)
 	return load(Parent:GetDescendants(), filter)
 
 end
